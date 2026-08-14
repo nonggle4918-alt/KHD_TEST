@@ -34,12 +34,12 @@
 
    | Secret 이름 | 값 |
    | --- | --- |
-   | `FIREBASE_API_KEY` | apiKey |
-   | `FIREBASE_AUTH_DOMAIN` | authDomain |
-   | `FIREBASE_PROJECT_ID` | projectId |
-   | `FIREBASE_STORAGE_BUCKET` | storageBucket |
-   | `FIREBASE_MESSAGING_SENDER_ID` | messagingSenderId |
-   | `FIREBASE_APP_ID` | appId |
+   | `VITE_FIREBASE_API_KEY` | apiKey |
+   | `VITE_FIREBASE_AUTH_DOMAIN` | authDomain |
+   | `VITE_FIREBASE_PROJECT_ID` | projectId |
+   | `VITE_FIREBASE_STORAGE_BUCKET` | storageBucket |
+   | `VITE_FIREBASE_MESSAGING_SENDER_ID` | messagingSenderId |
+   | `VITE_FIREBASE_APP_ID` | appId |
 
    배포 워크플로우(`deploy-pages.yml`)가 배포 직전에 이 Secrets 값으로 `src/firebase-config.js`를
    생성하므로, 저장소에는 실제 설정값을 커밋하지 않아도 됩니다. 로컬 개발 시에는
