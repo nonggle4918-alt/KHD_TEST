@@ -2,7 +2,7 @@
 // 요구사항에 맞춰 저장(saveScore)과 조회(getTop) 두 함수로만 외부에 노출한다.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import {
-  getFirestore,
+  initializeFirestore,
   collection,
   addDoc,
   query,
@@ -14,7 +14,10 @@ import {
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// 방화벽/보안 소프트웨어 등으로 스트리밍(gRPC-Web) 연결이 막히는 네트워크에서
+// 요청이 응답 없이 멈추는 문제가 있어, 필요 시 자동으로 long polling으로
+// 전환하도록 설정한다.
+const db = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
 const SCORES_COLLECTION = "scores";
 
 /**
