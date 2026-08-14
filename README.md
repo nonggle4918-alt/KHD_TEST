@@ -25,12 +25,26 @@
 ## Firebase 설정 방법
 
 1. [Firebase 콘솔](https://console.firebase.google.com)에서 새 프로젝트를 생성합니다.
-2. 프로젝트 설정 > 일반 > "웹 앱 추가"로 웹 앱을 등록하고, 표시되는 `firebaseConfig` 값을
-   `src/firebase-config.js`의 `firebaseConfig` 객체에 그대로 붙여넣습니다.
+2. 프로젝트 설정 > 일반 > "웹 앱 추가"로 웹 앱을 등록하고, 표시되는 `firebaseConfig` 값을 확인합니다.
 3. Firestore Database를 생성합니다 (프로덕션 모드 권장).
 4. Firestore 규칙 탭에 `firestore.rules` 내용을 붙여넣고 게시합니다.
    (닉네임 12자 이하, ms는 0~12000 범위의 숫자만 생성 가능하도록 제한, 읽기는 누구나 가능)
-5. 값을 채운 뒤 배포하면 랭킹 저장/조회가 정상 동작합니다.
+5. 저장소 **Settings > Secrets and variables > Actions**에서 아래 이름으로 Repository secret을 등록합니다.
+   (`src/firebase-config.js`에 있는 값과 1:1로 대응)
+
+   | Secret 이름 | 값 |
+   | --- | --- |
+   | `FIREBASE_API_KEY` | apiKey |
+   | `FIREBASE_AUTH_DOMAIN` | authDomain |
+   | `FIREBASE_PROJECT_ID` | projectId |
+   | `FIREBASE_STORAGE_BUCKET` | storageBucket |
+   | `FIREBASE_MESSAGING_SENDER_ID` | messagingSenderId |
+   | `FIREBASE_APP_ID` | appId |
+
+   배포 워크플로우(`deploy-pages.yml`)가 배포 직전에 이 Secrets 값으로 `src/firebase-config.js`를
+   생성하므로, 저장소에는 실제 설정값을 커밋하지 않아도 됩니다. 로컬 개발 시에는
+   `src/firebase-config.js`를 직접 채워서 테스트하면 됩니다 (이 파일은 배포 시 덮어써집니다).
+6. Secrets를 등록한 뒤 `main` 브랜치에 푸시(또는 워크플로우 재실행)하면 랭킹 저장/조회가 정상 동작합니다.
 
 ## GitHub Pages 배포
 
