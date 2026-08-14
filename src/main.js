@@ -1,7 +1,17 @@
 import { createGame, STATE } from "./game.js";
-import { saveScore, getTop } from "./firebase-service.js";
 
 const RANKING_SIZE = 10;
+
+// firebase-service.js는 CDN에서 Firebase SDK를 불러온다. 네트워크 문제 등으로
+// 이 로드가 실패해도 반응속도 측정 자체는 계속 동작해야 하므로, 정적 import 대신
+// 실제로 저장/조회가 필요한 시점에만 동적으로 불러온다.
+let firebaseServicePromise = null;
+function loadFirebaseService() {
+  if (!firebaseServicePromise) {
+    firebaseServicePromise = import("./firebase-service.js");
+  }
+  return firebaseServicePromise;
+}
 
 const screen = document.getElementById("game-screen");
 const message = document.getElementById("message");
@@ -41,6 +51,7 @@ async function onResult(ms) {
 
 async function refreshRanking() {
   try {
+    const { getTop } = await loadFirebaseService();
     const top = await getTop(RANKING_SIZE);
     rankingList.innerHTML = top
       .map((r) => `<li>${escapeHtml(r.nickname)} - ${r.ms}ms</li>`)
@@ -69,6 +80,7 @@ saveBtn.addEventListener("click", async () => {
   saveBtn.disabled = true;
   saveStatus.textContent = "저장 중...";
   try {
+    const { saveScore } = await loadFirebaseService();
     await saveScore(nickname, lastMs);
     saveStatus.textContent = "저장되었습니다!";
     await refreshRanking();
